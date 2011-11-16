@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
  
 setup(
     name='django-oauth2app-management',
-    version='0.1dev',
+    version='0.1.1dev',
     description="Client & Token management interface for django-oauth2app",
     author='Gabriel Grant',
     author_email='g@briel.ca',
