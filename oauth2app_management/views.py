@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectTemplateResponseMixin
 from django.views.generic.edit import FormMixin, ProcessFormView
@@ -12,6 +14,9 @@ from .forms import ClientForm
 class ClientViewMixin(object):
     def get_queryset(self):
         return Client.objects.filter(user=self.request.user)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ClientViewMixin, self).dispatch(*args, **kwargs)
 
 class ClientCreateView(ClientViewMixin, CreateView):
     template_name = 'oauth2app/client_create.html'
@@ -48,6 +53,9 @@ class AuthorizedClientViewMixin(object):
             accesstoken__user=self.request.user,
             accesstoken__expire__gt=now,
         )
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(AuthorizedClientViewMixin, self).dispatch(*args, **kwargs)
 
 class AuthorizedClientListView(AuthorizedClientViewMixin, ListView):
     template_name = 'oauth2app/authorized_client_list.html'
