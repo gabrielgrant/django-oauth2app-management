@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from django.views.generic.detail import SingleObjectTemplateResponseMixin
 from django.views.generic.edit import FormMixin, ProcessFormView
 from django.forms import Form
 from django.core.urlresolvers import reverse
@@ -61,14 +60,15 @@ class AuthorizedClientListView(AuthorizedClientViewMixin, ListView):
     template_name = 'oauth2app/authorized_client_list.html'
     pass
 
-class AuthorizedClientRevokeView(AuthorizedClientViewMixin, SingleObjectTemplateResponseMixin, FormMixin, ProcessFormView):
-    template_name_suffix = '_revoke'
+class AuthorizedClientRevokeView(AuthorizedClientViewMixin, DetailView, FormMixin, ProcessFormView):
+    template_name = 'oauth2app/authorized_client_revoke.html'
     form_class = Form
     def get_success_url(self):
         return reverse('oauth2_authorized_client_list')
     def form_valid(self, form):
         # remove the token(s) authorizing this client for this user
-        AccessToken.objects.filter(user=self.request.user, client=this.get_object()).delete()
+        client = self.get_object()
+        AccessToken.objects.filter(user=self.request.user, client=client).delete()
         return super(AuthorizedClientRevokeView, self).form_valid(form)
 
 class AuthorizedClientDetailView(AuthorizedClientViewMixin, DetailView):
