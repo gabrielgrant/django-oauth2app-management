@@ -86,7 +86,7 @@ oauth2app/client_list.html
 
 Users view a list of their registered OAuth2 Clients. This page
 should link to the individual Client Update pages (using
-``{% url 'oauth2_client_update' slug=client.key %}``), and to (likely)
+``{% url 'oauth2_client_update' slug=client.key %}``), and (likely)
 to the Client creation view (with ``{% url 'oauth2_client_create' %}``)
 
 Context:
